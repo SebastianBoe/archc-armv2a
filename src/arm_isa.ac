@@ -23,12 +23,14 @@ AC_ISA(arm) {
   ac_helper {
     #include "arm_isa_helper.H" 
   };
-  
+
+  // BOE: This is identical from armv2a to armv5e according to the Amber spec.
   /* Data processing instructions - ALU */
   ac_format Type_DPI1 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %shiftamount:5 %shift:2 %subop1:1 %rm:4";
   ac_format Type_DPI2 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %rs:4 %subop2:1 %shift:2 %subop1:1 %rm:4";
   ac_format Type_DPI3 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %rotate:4 %imm8:8"; 
 
+  
   /* Branch instructions - BBLT needs cond = 1111 - bx and blx2 use type MISC1*/
   ac_format Type_BBL = "%cond:4 %op:3 %h:1 %offset:24";
   ac_format Type_BBLT = "%cond:4 %op:3 %h:1 %offset:24";
