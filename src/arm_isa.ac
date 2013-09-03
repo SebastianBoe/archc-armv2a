@@ -64,7 +64,6 @@ AC_ISA(arm) {
  
   /* Special instructions */
   ac_format Type_MSWI = "%cond:4 %op:3 %subop3:1 %swinumber:24";
-  ac_format Type_MCLZ = "%cond:4 %op:3 %func1:4 %s:1 %one1:4 %rd:4 %one3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_MMSR1 = "%cond:4 %op:3 %func11:2 %r:1 %func12:2 %fieldmask:4 %rd:4 %zero3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_MMSR2 = "%cond:4 %op:3 %func11:2 %r:1 %func12:2 %fieldmask:4 %one2:4 %rotate:4 %imm8:8";
 
@@ -100,7 +99,6 @@ AC_ISA(arm) {
 
   /* Special instructions */
   ac_instr<Type_MSWI> swi;
-  ac_instr<Type_MCLZ> clz;
   ac_instr<Type_MMSR1> mrs, msr1;
   ac_instr<Type_MMSR2> msr2;
   
@@ -818,9 +816,6 @@ AC_ISA(arm) {
 		swi.set_asm("swi%[cond] #%imm", cond, swinumber);
     swi.set_decoder(op=0x07, subop3=0x01);
 
-    clz.set_asm("clz%[cond] %reg, %reg", cond, rd, rm, one1=0x0F, one3=0x0F);
-    clz.set_decoder(op=0x00, subop1=0x01, subop2=0x00, func1=0x0B, func2=0x00, s=0x00);    
- 
     mrs.set_asm("mrs%[cond] %reg, %psr", cond, rd, r);    
     mrs.set_decoder(op=0x00, subop1=0x00, subop2=0x00, func11=0x02, func12=0x00, rm=0x00, fieldmask=0xF);
 
