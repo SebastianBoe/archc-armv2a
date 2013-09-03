@@ -85,8 +85,10 @@ AC_ISA(arm) {
   ac_instr<Type_MULT2> smlal, smull, umlal, umull;
 
   /* Load/Store */
-  ac_instr<Type_LSI> ldrt1, ldrbt1, ldr1, ldrb1, strt1, strbt1, str1, strb1;
-  ac_instr<Type_LSR> ldrt2, ldrbt2, ldr2, ldrb2, strt2, strbt2, str2, strb2;
+  ac_instr<Type_LSI> ldr1, ldrb1, str1, strb1;
+  ac_instr<Type_LSR> ldr2, ldrb2, str2, strb2;
+  //Removed LDRT / STRT instructions.
+
   //Not supported //ac_instr<Type_LSE> ldrh, ldrsb, ldrsh, strh, ldrd, strd; // ldrd e strd sao instrucoes DSP
   ac_instr<Type_MTRANS> ldm, stm;
 
@@ -443,44 +445,6 @@ AC_ISA(arm) {
     // is followed by comments regarding which addressing mode is implemented. For more
     // information, please refer to any ARM Assembly Language guide.
 
-    //LDRT
-    //Features only post-indexed addressing modes (addr. mode 2 - register indirect, base plus offset and base plus index)
-    ldrt1.set_asm("ldr%[cond]t %reg, [%reg]", cond, rd, rn, imm12=0x00, u=0x01);
-    ldrt1.set_asm("ldr%[cond]t %reg, [%reg], #+%imm", cond, rd, rn, imm12, u=0x01); 
-    ldrt1.set_asm("ldr%[cond]t %reg, [%reg], #-%imm", cond, rd, rn, imm12, u=0x00); 
-    ldrt1.set_asm("ldr%[cond]t %reg, [%reg], #%imm", cond, rd, rn, imm12, u=0x01); 
-    ldrt1.set_decoder(op=0x02, p=0x00, b=0x00, w=0x01, l=0x01);
-
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], +%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], -%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x00); 
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], %reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], +%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], -%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x00);
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], %reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], +%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], -%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x00);
-    ldrt2.set_asm("ldr%[cond]t %reg, [%reg], %reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    ldrt2.set_decoder(op=0x03, subop1=0x00, p=0x00, b=0x00, w=0x01, l=0x01);
-
-    //LDRBT
-    //Features only post-indexed addressing modes (addr. mode 2 - register indirect, base plus offset and base plus index)
-    ldrbt1.set_asm("ldr%[cond]bt %reg, [%reg]", cond, rd, rn, imm12=0x00, u=0x01);
-    ldrbt1.set_asm("ldr%[cond]bt %reg, [%reg], #+%imm", cond, rd, rn, imm12, u=0x01); 
-    ldrbt1.set_asm("ldr%[cond]bt %reg, [%reg], #-%imm", cond, rd, rn, imm12, u=0x00); 
-    ldrbt1.set_asm("ldr%[cond]bt %reg, [%reg], #%imm", cond, rd, rn, imm12, u=0x01); 
-    ldrbt1.set_decoder(op=0x02, p=0x00, b=0x01, w=0x01, l=0x01);
-
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], +%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], -%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x00); 
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], %reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], +%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], -%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x00);
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], %reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], +%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], -%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x00);
-    ldrbt2.set_asm("ldr%[cond]bt %reg, [%reg], %reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    ldrbt2.set_decoder(op=0x03, subop1=0x00, p=0x00, b=0x01, w=0x01, l=0x01);
-
     //LDR
     // Includes all addressing syntaxes in addressing mode 2 - load/store instructions
     //  Immediate offset/pre-indexed/post-indexed (Base plus offset addressing)
@@ -663,44 +627,6 @@ AC_ISA(arm) {
     ldrsh.set_asm("ldr%[cond]sh %reg, [%reg], -%reg", cond, rd, rn, addr2, addr1=0x0, u=0, p=0, w=0, i=0);
     ldrsh.set_asm("ldr%[cond]sh %reg, [%reg], %reg", cond, rd, rn, addr2, addr1=0x0, u=1, p=0, w=0, i=0);
     ldrsh.set_decoder(op=0x00, subop1=0x01, subop2=0x01, ss=0x01, hh=0x01, l=0x01);
-
-    //STRT
-    //Supports only post-indexed addressing modes (addr. mode 2 - register indirect, base plus offset and base plus index)
-    strt1.set_asm("str%[cond]t %reg, [%reg]", cond, rd, rn, imm12=0x00, u=0x01);
-    strt1.set_asm("str%[cond]t %reg, [%reg], #+%imm", cond, rd, rn, imm12, u=0x01); 
-    strt1.set_asm("str%[cond]t %reg, [%reg], #-%imm", cond, rd, rn, imm12, u=0x00); 
-    strt1.set_asm("str%[cond]t %reg, [%reg], #%imm", cond, rd, rn, imm12, u=0x01); 
-    strt1.set_decoder(op=0x02, p=0x00, b=0x00, w=0x01, l=0x00);
-
-    strt2.set_asm("str%[cond]t %reg, [%reg], +%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    strt2.set_asm("str%[cond]t %reg, [%reg], -%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x00); 
-    strt2.set_asm("str%[cond]t %reg, [%reg], %reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    strt2.set_asm("str%[cond]t %reg, [%reg], +%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    strt2.set_asm("str%[cond]t %reg, [%reg], -%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x00);
-    strt2.set_asm("str%[cond]t %reg, [%reg], %reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    strt2.set_asm("str%[cond]t %reg, [%reg], +%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    strt2.set_asm("str%[cond]t %reg, [%reg], -%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x00);
-    strt2.set_asm("str%[cond]t %reg, [%reg], %reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    strt2.set_decoder(op=0x03, subop1=0x00, p=0x00, b=0x00, w=0x01, l=0x00);
-
-    //STRBT
-    //Suppports only post-indexed addressing modes (addr. mode 2 - register indirect, base plus offset and base plus index)
-    strbt1.set_asm("str%[cond]bt %reg, [%reg]", cond, rd, rn, imm12=0x00, u=0x01);
-    strbt1.set_asm("str%[cond]bt %reg, [%reg], #+%imm", cond, rd, rn, imm12, u=0x01); 
-    strbt1.set_asm("str%[cond]bt %reg, [%reg], #-%imm", cond, rd, rn, imm12, u=0x00); 
-    strbt1.set_asm("str%[cond]bt %reg, [%reg], #%imm", cond, rd, rn, imm12, u=0x01); 
-    strbt1.set_decoder(op=0x02, p=0x00, b=0x01, w=0x01, l=0x00);
-
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], +%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], -%reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x00); 
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], %reg", cond, rd, rn, rm, shiftamount=0x00, shift=0x00, u=0x01); 
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], +%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], -%reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x00);
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], %reg, %shift #%imm", cond, rd, rn, rm, shift, shiftamount, u=0x01);
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], +%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], -%reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x00);
-    strbt2.set_asm("str%[cond]bt %reg, [%reg], %reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01);
-    strbt2.set_decoder(op=0x03, subop1=0x00, p=0x00, b=0x01, w=0x01, l=0x00);
 
     //STR
     // Includes all addressing syntaxes in addressing mode 2 - load/store instructions
