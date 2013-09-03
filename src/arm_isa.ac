@@ -37,9 +37,14 @@ AC_ISA(arm) {
   // BOE: This format is not needed anymore.
   // ac_format Type_MBXBLX = "%cond:4 %op:3 %func1:4 %s:1 %one1:4 %one2:4 %one3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
   
+  /* BOE: MULT2 isn't in armv2a and the type names are stupid. Doing a rewrite. */
   /* Swap and multiply */
-  ac_format Type_MULT1 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4     %rs:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
-  ac_format Type_MULT2 = "%cond:4 %op:3 %func1:4 %s:1 %rdhi:4 %rdlo:4 %rs:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
+  //ac_format Type_MULT1 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4     %rs:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
+  //ac_format Type_MULT2 = "%cond:4 %op:3 %func1:4 %s:1 %rdhi:4 %rdlo:4 %rs:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
+
+  ac_format Type_MULT = "%cond:4 %op:3 %func1:4 %s:1 %rd:4 %rn:4 %rs:4  %subop2:1 %func2:2 %subop1:1 %rm:4";
+  ac_format Type_SWAP = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %sbz:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
+  //sbz is zeroed. Acronym for Swap Bits Zeroed?
 
   /* Load/Store */
   ac_format Type_LSI = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %imm12:12";
