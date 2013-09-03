@@ -18,7 +18,9 @@
  * @attention Copyright (C) 2002-2012 --- The ArchC Team
  *
  */
- 
+
+//BOE: Comments prefixed with BOE were made during the port from ARMv5e to ARMv2a. 
+
 AC_ISA(arm) {	
   ac_helper {
     #include "arm_isa_helper.H" 
@@ -44,7 +46,7 @@ AC_ISA(arm) {
 
   ac_format Type_MULT = "%cond:4 %op:3 %func1:4 %s:1 %rd:4 %rn:4 %rs:4  %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_SWAP = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %sbz:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
-  //sbz is zeroed. Acronym for Swap Bits Zeroed?
+  // BOE: sbz is zeroed. Acronym for Swap Bits Zeroed?
 
   /* Load/Store */
   ac_format Type_LSI = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %imm12:12";
@@ -61,7 +63,6 @@ AC_ISA(arm) {
   ac_format Type_CLS = "%cond:4 %op:3 %p:1 %u:1 %n:1 %w:1 %l:1 %rn:4 %crd:4 %cp_num:4 %imm8:8";
  
   /* Special instructions */
-  ac_format Type_MBKPT = "%cond:4 %op:3 %func1:4 %s:1 %immediate:12 %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_MSWI = "%cond:4 %op:3 %subop3:1 %swinumber:24";
   ac_format Type_MCLZ = "%cond:4 %op:3 %func1:4 %s:1 %one1:4 %rd:4 %one3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_MMSR1 = "%cond:4 %op:3 %func11:2 %r:1 %func12:2 %fieldmask:4 %rd:4 %zero3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
@@ -98,7 +99,6 @@ AC_ISA(arm) {
   ac_instr<Type_CLS> ldc, stc;
 
   /* Special instructions */
-  ac_instr<Type_MBKPT> bkpt;
   ac_instr<Type_MSWI> swi;
   ac_instr<Type_MCLZ> clz;
   ac_instr<Type_MMSR1> mrs, msr1;
@@ -813,9 +813,6 @@ AC_ISA(arm) {
     /************************/
     /* Special instructions */
     /************************/
-
-    bkpt.set_asm("bkpt %imm", immediate+rm, cond=0xE);
-    bkpt.set_decoder(op=0x00, subop1=0x01, subop2=0x00, func1=0x09, func2=0x03, s=0x00, cond=0x0E);    
 
     swi.set_asm("swi%[cond] %imm", cond, swinumber);
 		swi.set_asm("swi%[cond] #%imm", cond, swinumber);
