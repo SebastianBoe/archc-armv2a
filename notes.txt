@@ -1,4 +1,4 @@
-This text describes the ISA differences between ARMv2a and ARMv5e.
+This text describes ISA differences between the Amber core, ARMv2a and ARMv5e.
 
 # Instructions introduced in ARMv5e, ARMv5
 
@@ -16,3 +16,10 @@ PLD, Prefetch
 MRRC, Some coprocessor operation
 MCRR, Some coprocessor operation
 BKPT, Breakpoint
+
+# There is an oddity with the LDRT and STRT instructions
+ARM defines them to be implemented by all architectures,
+but the Amber core does not implement them. 
+
+They seem to only be needed when you have virtual memory, which SHMAC does not support.
+It should be safe to not implement them. 
