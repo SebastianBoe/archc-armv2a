@@ -64,8 +64,6 @@ AC_ISA(arm) {
  
   /* Special instructions */
   ac_format Type_MSWI = "%cond:4 %op:3 %subop3:1 %swinumber:24";
-  ac_format Type_MMSR1 = "%cond:4 %op:3 %func11:2 %r:1 %func12:2 %fieldmask:4 %rd:4 %zero3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
-  ac_format Type_MMSR2 = "%cond:4 %op:3 %func11:2 %r:1 %func12:2 %fieldmask:4 %one2:4 %rotate:4 %imm8:8";
 
   /* DSP multiply instructions */
   ac_format Type_DSPSM = "%cond:4 %sm:8 %drd:4 %drn:4 %rs:4 %subop2:1 %yy:1 %xx:1 %subop1:1 %rm:4";
@@ -99,8 +97,6 @@ AC_ISA(arm) {
 
   /* Special instructions */
   ac_instr<Type_MSWI> swi;
-  ac_instr<Type_MMSR1> mrs, msr1;
-  ac_instr<Type_MMSR2> msr2;
   
   /* DSP Instructions */
   /* LSE Load/Store format has DSP instructions (ldrd and strd) */
@@ -152,12 +148,6 @@ AC_ISA(arm) {
   ac_asm_map sf {
     "" = 0;
     "s" = 1;    
-  }
-
-  /* MSR/MRS instruction special fields */
-  ac_asm_map psr {
-    "cpsr" = 0;
-    "spsr" = 1;
   }
 
   /* Multiple load/store stack specification aliases */
@@ -815,18 +805,6 @@ AC_ISA(arm) {
     swi.set_asm("swi%[cond] %imm", cond, swinumber);
 		swi.set_asm("swi%[cond] #%imm", cond, swinumber);
     swi.set_decoder(op=0x07, subop3=0x01);
-
-    mrs.set_asm("mrs%[cond] %reg, %psr", cond, rd, r);    
-    mrs.set_decoder(op=0x00, subop1=0x00, subop2=0x00, func11=0x02, func12=0x00, rm=0x00, fieldmask=0xF);
-
-    /* MSR will not be implemented in this model. */
-    
-//    msr1.set_asm("");
-    msr1.set_decoder(op=0x00, subop1=0x00, subop2=0x00, func11=0x02, func12=0x02, zero3=0x00, func2=0x00);
-
-//    msr2.set_asm("");
-    msr2.set_decoder(op=0x01, func11=0x02, func12=0x02, one2=0x0f);
-    
 
     /************************/
     /* DSP instructions     */
