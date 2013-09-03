@@ -1,0 +1,18 @@
+This text describes the ISA differences between ARMv2a and ARMv5e.
+
+# Instructions introduced in ARMv5e, ARMv5
+
+Q{D}ADD Rd, Rm, Rn, Add, saturating {doubled}, 
+Q{D}SUB Rd, Rm, Rn, Subtract, saturating {doubled}, Multiply, SMULxy
+SMULWy, Multiply 
+SMLAxy, Multiply 
+SMLAWy, Multiply
+SMLALxy, Multiply 
+CLZ Rd, Rm, Count leading zeros
+BLX Rm, Branch with link and exchange
+STRD, Store a double 
+LDRD, Load  a double
+PLD, Prefetch 
+MRRC, Some coprocessor operation
+MCRR, Some coprocessor operation
+BKPT, Breakpoint
