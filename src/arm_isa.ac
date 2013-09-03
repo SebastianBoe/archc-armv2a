@@ -98,10 +98,6 @@ AC_ISA(arm) {
   /* Special instructions */
   ac_instr<Type_MSWI> swi;
   
-  /* DSP Instructions */
-  /* LSE Load/Store format has DSP instructions (ldrd and strd) */
-  ac_instr<Type_DSPSM> dsmla, dsmlal, dsmul, dsmlaw, dsmulw;
-  
   /* ARM register aliases */
   ac_asm_map reg {
    "r"[0..15] = [0..15];
@@ -807,33 +803,6 @@ AC_ISA(arm) {
     swi.set_decoder(op=0x07, subop3=0x01);
 
     /************************/
-    /* DSP instructions     */
-    /************************/
-
-    /* DSP instructions will not be implemented in this model. */
-
-//    ldrd.set_asm("");
-    ldrd.set_decoder(op=0x00, subop1=0x01, subop2=0x01, ss=0x01, hh=0x00, l=0x00);
-    
-//    strd.set_asm("");
-    strd.set_decoder(op=0x00, subop1=0x01, subop2=0x01, ss=0x01, hh=0x01, l=0x00);
-
-//    dsmla.set_asm("");
-    dsmla.set_decoder(sm=0x10, subop2=1, subop1=0);
-
-//    dsmlal.set_asm("");
-    dsmlal.set_decoder(sm=0x14, subop2=1, subop1=0);
-
-//    dsmlaw.set_asm("");
-    dsmlaw.set_decoder(sm=0x12, subop2=1, xx=0, subop1=0);
-
-//    dsmul.set_asm("");
-    dsmul.set_decoder(sm=0x16, subop2=1, subop1=0);
-
-//    dsmulw.set_asm("");
-    dsmulw.set_decoder(sm=0x12, subop2=1, xx=1, subop1=0);
-
-    /************************/
     /* Pseudo instructions  */
     /************************/
 
@@ -849,4 +818,3 @@ AC_ISA(arm) {
     
   };
 };
-
