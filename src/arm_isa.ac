@@ -50,7 +50,7 @@ AC_ISA(arm) {
   ac_format Type_LSI = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %imm12:12";
   ac_format Type_LSR = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %shiftamount:5 %shift:2 %subop1:1 %rm:4";
   ac_format Type_LSE = "%cond:4 %op:3 %p:1 %u:1 %i:1 %w:1 %l:1 %rn:4 %rd:4 %addr1:4 %subop2:1 %ss:1 %hh:1 %subop1:1 %addr2:4";
-  ac_format Type_LSM = "%cond:4 %op:3 %p:1 %u:1 %r:1 %w:1 %l:1 %rn:4 %rlist:16";
+  ac_format Type_MTRANS = "%cond:4 %op:3 %p:1 %u:1 %r:1 %w:1 %l:1 %rn:4 %rlist:16";
 
   /* Coprocessor instructions */
   ac_format Type_CDP = "%cond:4 %op:3 %subop3:1 %funcc1:4 %crn:4 %crd:4 %cp_num:4 %funcc3:3 %subop1:1 %crm:4";
@@ -85,7 +85,7 @@ AC_ISA(arm) {
   ac_instr<Type_LSI> ldrt1, ldrbt1, ldr1, ldrb1, strt1, strbt1, str1, strb1;
   ac_instr<Type_LSR> ldrt2, ldrbt2, ldr2, ldrb2, strt2, strbt2, str2, strb2;
   ac_instr<Type_LSE> ldrh, ldrsb, ldrsh, strh, ldrd, strd; // ldrd e strd sao instrucoes DSP
-  ac_instr<Type_LSM> ldm, stm;
+  ac_instr<Type_MTRANS> ldm, stm;
 
   /* Coprocessor instructions */
   ac_instr<Type_CDP> cdp;
@@ -838,7 +838,7 @@ AC_ISA(arm) {
     ** DB - Decrement Before * DA - Decrement After
     */
 
-//  ac_format Type_LSM = "%cond:4 %op:3 %p:1 %u:1 %r:1 %w:1 %l:1 %rn:4 %rlist:16";
+//  ac_format Type_MTRANS = "%cond:4 %op:3 %p:1 %u:1 %r:1 %w:1 %l:1 %rn:4 %rlist:16";
     ldm.set_asm("ldm%cond%lstype %reg, {%reg...(dorlist)}", cond, p+u, rn, rlist, r=0,w=0);    
     ldm.set_asm("ldm%cond%lstype %reg!, {%reg...(dorlist)}", cond, p+u, rn, rlist, r=0, w=1);  
     ldm.set_asm("ldm%cond%lstype %reg, {%reg...(dorlist)}^", cond, p+u, rn, rlist, r=1,w=0);  
