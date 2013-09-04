@@ -32,12 +32,8 @@ AC_ISA(arm) {
   ac_format Type_DPI2 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %rs:4 %subop2:1 %shift:2 %subop1:1 %rm:4";
   ac_format Type_DPI3 = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %rotate:4 %imm8:8"; 
 
-  /* Branch instructions - BBLT needs cond = 1111 - bx and blx2 use type MISC1*/
+  /* Branch instructions */
   ac_format Type_BBL    = "%cond:4 %op:3 %h:1 %offset:24";
-  ac_format Type_BBLT   = "%cond:4 %op:3 %h:1 %offset:24";
-  
-  // BOE: This format is not needed anymore.
-  // ac_format Type_MBXBLX = "%cond:4 %op:3 %func1:4 %s:1 %one1:4 %one2:4 %one3:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
   
   /* BOE: MULT2 isn't in armv2a and the type names are stupid. Doing a rewrite. */
   /* Swap and multiply */
@@ -46,12 +42,11 @@ AC_ISA(arm) {
 
   ac_format Type_MULT = "%cond:4 %op:3 %func1:4 %s:1 %rd:4 %rn:4 %rs:4  %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_SWAP = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %sbz:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
-  // BOE: sbz is zeroed. Acronym for Swap Bits Zeroed?
+  // BOE: sbz are zeroed.
 
   /* Load/Store */
   ac_format Type_LSI = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %imm12:12";
   ac_format Type_LSR = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %shiftamount:5 %shift:2 %subop1:1 %rm:4";
-  //ac_format Type_LSE = "%cond:4 %op:3 %p:1 %u:1 %i:1 %w:1 %l:1 %rn:4 %rd:4 %addr1:4 %subop2:1 %ss:1 %hh:1 %subop1:1 %addr2:4";
 
   ac_format Type_MTRANS = "%cond:4 %op:3 %p:1 %u:1 %r:1 %w:1 %l:1 %rn:4 %rlist:16";
   // Hmm in the Amber docs the r field is called S, 
@@ -73,14 +68,15 @@ AC_ISA(arm) {
   ac_instr<Type_DPI2> and2, eor2, sub2, rsb2, add2, adc2, sbc2, rsc2, tst2, teq2, cmp2, cmn2, orr2, mov2, bic2, mvn2;
   ac_instr<Type_DPI3> and3, eor3, sub3, rsb3, add3, adc3, sbc3, rsc3, tst3, teq3, cmp3, cmn3, orr3, mov3, bic3, mvn3;
 
-  /* Branch instructions - BBLT needs cond = 1111 - bx and blx2 use type MISC1*/
-  ac_instr<Type_BBLT> blx1;
+  /* Branch instructions */
   ac_instr<Type_BBL> b;
-  ac_instr<Type_MBXBLX> bx, blx2;
 
   /* Swap and multiply */
   ac_instr<Type_MULT1> swp, swpb, mla, mul;
   ac_instr<Type_MULT2> smlal, smull, umlal, umull;
+
+  ac_instr<Type_SWAP> swp, swpb;
+  ac_instr<Type_MULT> mla, mul;
 
   /* Load/Store */
   ac_instr<Type_LSI> ldr1, ldrb1, str1, strb1;
@@ -379,18 +375,9 @@ AC_ISA(arm) {
     /* Branch instructions */
     /***********************/
 
-    blx1.set_asm("blx %exp(bximm)", h+offset);
-    blx1.set_decoder(op=0x05, cond=0x0F);
-
     b.set_asm("b%[cond] %exp(bimm)", cond, offset, h=0);
     b.set_asm("bl%[cond] %exp(bimm)", cond, offset, h=1);
     b.set_decoder(op=0x05);
-
-    bx.set_asm("bx%[cond] %reg", cond, rm, one1=0xF, one2=0xF, one3=0xF);
-    bx.set_decoder(op=0x00, subop1=0x01, subop2=0x00, func1=0x09, s=0x00, func2=0x00);    
-
-    blx2.set_asm("blx%[cond] %reg", cond, rm, one1=0xF, one2=0xF, one3=0xF);
-    blx2.set_decoder(op=0x00, subop1=0x01, subop2=0x00, func1=0x09, s=0x00, func2=0x01);    
 
     /**************************************/
     /* Swap/Multiplication instructions   */
