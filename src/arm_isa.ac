@@ -498,33 +498,6 @@ AC_ISA(arm) {
     ldrb2.set_asm("ldr%[cond]b %reg, [%reg], %reg, rrx", cond, rd, rn, rm, shift=0x03, shiftamount=0x00, u=0x01, p=0x00, w=0x00);
     ldrb2.set_decoder(op=0x03, subop1=0x00, b=0x01, l=0x01);
 
-    //LDRH
-    // Supports all adressing syntaxes in addressing mode 3 - miscellaneous load/store instructions
-    // (Like regular addressing modes 2, but without base plus scaled index addressing)
-    //  Normal base plus offset or base plus index
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg]", cond, rd, rn, addr1=0, addr2=0, u=1, p=1, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #+%imm]", cond, rd, rn, addr1+addr2, u=1, p=1, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #-%imm]", cond, rd, rn, addr1+addr2, u=0, p=1, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #%imm]", cond, rd, rn, addr1+addr2, u=1, p=1, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, +%reg]", cond, rd, rn, addr2, addr1=0x0, u=1, p=1, w=0, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, -%reg]", cond, rd, rn, addr2, addr1=0x0, u=0, p=1, w=0, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, %reg]", cond, rd, rn, addr2, addr1=0x0, u=1, p=1, w=0, i=0);
-    //  Pre-indexed (base plus offset/base plus index)
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #+%imm]!", cond, rd, rn, addr1+addr2, u=1, p=1, w=1, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #-%imm]!", cond, rd, rn, addr1+addr2, u=0, p=1, w=1, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, #%imm]!", cond, rd, rn, addr1+addr2, u=1, p=1, w=1, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, +%reg]!", cond, rd, rn, addr2, addr1=0x0, u=1, p=1, w=1, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, -%reg]!", cond, rd, rn, addr2, addr1=0x0, u=0, p=1, w=1, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg, %reg]!", cond, rd, rn, addr2, addr1=0x0, u=1, p=1, w=1, i=0);
-    //  Post-indexed (base plus offset/base plus index)
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], #+%imm", cond, rd, rn, addr1+addr2, u=1, p=0, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], #-%imm", cond, rd, rn, addr1+addr2, u=0, p=0, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], #%imm", cond, rd, rn, addr1+addr2, u=1, p=0, w=0, i=1);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], +%reg", cond, rd, rn, addr2, addr1=0x0, u=1, p=0, w=0, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], -%reg", cond, rd, rn, addr2, addr1=0x0, u=0, p=0, w=0, i=0);
-    ldrh.set_asm("ldr%[cond]h %reg, [%reg], %reg", cond, rd, rn, addr2, addr1=0x0, u=1, p=0, w=0, i=0);
-    ldrh.set_decoder(op=0x00, subop1=0x01, subop2=0x01, ss=0x00, hh=0x01, l=0x01);
-
     //LDRSB
     // Supports all adressing syntaxes in addressing mode 3 - miscellaneous load/store instructions
     // (Like regular addressing modes 2, but without base plus scaled index addressing)
