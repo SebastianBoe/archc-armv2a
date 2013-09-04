@@ -28,6 +28,7 @@ public:
 	static const unsigned int FIQ_MODE        = 0x11; // 0b10001;
 	static const unsigned int IRQ_MODE        = 0x12; // 0b10010;
 	static const unsigned int SUPERVISOR_MODE = 0x13; // 0b10011;
+	static const unsigned int ABORT_MODE      = 0x17; // 0b10111;
 	static const unsigned int UNDEFINED_MODE  = 0x1B; // 0b11011;
 	static const unsigned int SYSTEM_MODE     = 0x1F; // 0b11111;
 	static const unsigned int MODE_MASK       = 0x1F; // 0b11111;
@@ -139,6 +140,14 @@ void bypass_write(unsigned address, unsigned datum) {
     else
       RB .write(address, datum);
     break;
+  case processor_mode::ABORT_MODE:
+    if (address == 14)
+      R14_abt = datum;
+    else if (address == 13)
+      R13_abt = datum;
+    else
+      RB .write(address, datum);
+    break;
   case processor_mode::UNDEFINED_MODE:
     if (address == 14)
       R14_und = datum;
@@ -196,6 +205,14 @@ unsigned bypass_read(unsigned address) {
       return R14_svc;
     else if (address == 13)
       return R13_svc;
+    else
+      return RB.read(address);
+    break;
+  case processor_mode::ABORT_MODE:
+    if (address == 14)
+      return R14_abt;
+    else if (address == 13)
+      return R13_abt;
     else
       return RB.read(address);
     break;
@@ -302,6 +319,9 @@ void SPSRtoCPSR() {
   case processor_mode::SUPERVISOR_MODE:
     writeCPSR(SPSR_svc);
     break;
+  case processor_mode::ABORT_MODE:
+    writeCPSR(SPSR_abt);
+    break;
   case processor_mode::UNDEFINED_MODE:
     writeCPSR(SPSR_und);
     break;
@@ -322,6 +342,9 @@ void writeSPSR(unsigned value) {
   case processor_mode::SUPERVISOR_MODE:
     SPSR_svc = value;
     break;
+  case processor_mode::ABORT_MODE:
+    SPSR_abt = value;
+    break;
   case processor_mode::UNDEFINED_MODE:
     SPSR_und = value;
     break;
@@ -336,6 +359,8 @@ unsigned readSPSR() {
     return SPSR_irq;
   case processor_mode::SUPERVISOR_MODE:
     return SPSR_svc;
+  case processor_mode::ABORT_MODE:
+    return SPSR_abt;
   case processor_mode::UNDEFINED_MODE:
     return SPSR_und;
   }
@@ -348,6 +373,7 @@ bool in_a_privileged_mode() {
   case processor_mode::FIQ_MODE:
   case processor_mode::IRQ_MODE:
   case processor_mode::SUPERVISOR_MODE:
+  case processor_mode::ABORT_MODE:
   case processor_mode::UNDEFINED_MODE:
     return true;
   }  
@@ -366,6 +392,8 @@ const char * cur_mode_str() {
     return "IRQ";
   case processor_mode::SUPERVISOR_MODE:
     return "SUPERVISOR";
+  case processor_mode::ABORT_MODE:
+    return "ABORT";
   case processor_mode::UNDEFINED_MODE:
     return "UNDEFINED";
   }
