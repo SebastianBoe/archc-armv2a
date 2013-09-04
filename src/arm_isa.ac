@@ -37,7 +37,6 @@ AC_ISA(arm) {
   
   ac_format Type_MULT = "%cond:4 %op:3 %func1:4 %s:1 %rd:4 %rn:4 %rs:4  %subop2:1 %func2:2 %subop1:1 %rm:4";
   ac_format Type_SWAP = "%cond:4 %op:3 %func1:4 %s:1 %rn:4 %rd:4 %sbz:4 %subop2:1 %func2:2 %subop1:1 %rm:4";
-  // BOE: sbz are zeroed.
 
   /* Load/Store */
   ac_format Type_LSI = "%cond:4 %op:3 %p:1 %u:1 %b:1 %w:1 %l:1 %rn:4 %rd:4 %imm12:12";
@@ -55,9 +54,6 @@ AC_ISA(arm) {
   /* Special instructions */
   ac_format Type_MSWI = "%cond:4 %op:3 %subop3:1 %swinumber:24";
 
-  /* DSP multiply instructions */
-  ac_format Type_DSPSM = "%cond:4 %sm:8 %drd:4 %drn:4 %rs:4 %subop2:1 %yy:1 %xx:1 %subop1:1 %rm:4";
-
   /* Data processing instructions - ALU */
   ac_instr<Type_DPI1> and1, eor1, sub1, rsb1, add1, adc1, sbc1, rsc1, tst1, teq1, cmp1, cmn1, orr1, mov1, bic1, mvn1;
   ac_instr<Type_DPI2> and2, eor2, sub2, rsb2, add2, adc2, sbc2, rsc2, tst2, teq2, cmp2, cmn2, orr2, mov2, bic2, mvn2;
@@ -73,9 +69,7 @@ AC_ISA(arm) {
   /* Load/Store */
   ac_instr<Type_LSI> ldr1, ldrb1, str1, strb1;
   ac_instr<Type_LSR> ldr2, ldrb2, str2, strb2;
-  //Removed LDRT / STRT instructions.
 
-  //Not supported //ac_instr<Type_LSE> ldrh, ldrsb, ldrsh, strh, ldrd, strd; // ldrd e strd sao instrucoes DSP
   ac_instr<Type_MTRANS> ldm, stm;
 
   /* Coprocessor instructions */
@@ -117,7 +111,7 @@ AC_ISA(arm) {
     "lt" = 11;
     "gt" = 12;
     "le" = 13;
-    ""   = 14;
+    ""   = 14; //Should 14 be "al", meaning Always(unconditional)?
   }
 
   /* ARM operand shifting options */
@@ -674,6 +668,5 @@ AC_ISA(arm) {
     pseudo_instr ("ldr %reg, %exprR8b") {
       "ldr %0, [r15, #%1]";
     }*/
-    
   };
 };
